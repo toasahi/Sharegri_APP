@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="fill_parent"
-              android:layout_height="fill_parent"
-              android:orientation="vertical" >
+              android:layout_height="fill_parent" xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical">
 
-    <Button android:id="@+id/connectButton"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="Connect" />
+<!--    <Button android:id="@+id/connectButton"-->
+<!--            android:layout_width="fill_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="Connect" />-->
 
     <TextView
             android:id="@+id/statusValue"
@@ -21,9 +21,15 @@
             android:layout_height="wrap_content"
     />
 
-    <Button android:id="@+id/writeButton"
-            android:layout_width="fill_parent"
+    <com.google.android.material.button.MaterialButton
+            android:id="@+id/writeButton"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Write" />
+            android:text="Write"
+            android:textSize="18dp"
+            android:layout_margin="20dp"
+            android:backgroundTint="#73C503"
+            android:padding="15dp"
+            app:cornerRadius="15dp"/>
 
 </LinearLayout>

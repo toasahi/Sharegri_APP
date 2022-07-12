@@ -24,10 +24,6 @@ private const val TAG = "ESP32_ASA"
 /* デバイス名 環境に合わせて変更*/
 private const val DEVICE_NAME = "ESP32_ASA"
 
-val MESSAGE_READ: Int = 0
-val MESSAGE_WRITE: Int = 1
-val MESSAGE_TOAST: Int = 2
-
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     val REQUEST_ENABLE_BT = 1
@@ -85,7 +81,6 @@ class MainActivity : AppCompatActivity() {
         mInputTextView = binding.inputValue
         mStatusTextView = binding.statusValue
 
-        connectButton = binding.connectButton;
         writeButton = binding.writeButton;
 
 //        binding.connectButton.setOnClickListener{
@@ -129,22 +124,22 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun connect(){
-        val pairedDevices: Set<BluetoothDevice>? = bluetoothAdapter?.bondedDevices
-        pairedDevices?.forEach { device ->
-            val deviceName = device.name
-            val deviceHardwareAddress = device.address // MAC address
-            if (device.name == DEVICE_NAME) {
-                Log.d(TAG, "name = %s, MAC <%s>".format(deviceName, deviceHardwareAddress))
-                device.uuids.forEach { uuid ->
-                    Log.d(TAG, "uuid is %s".format(uuid.uuid))
-                }
-                connectThread = ConnectThread(device)
-                connectThread?.start()
-                return
-            }
-        }
-    }
+//    fun connect(){
+//        val pairedDevices: Set<BluetoothDevice>? = bluetoothAdapter?.bondedDevices
+//        pairedDevices?.forEach { device ->
+//            val deviceName = device.name
+//            val deviceHardwareAddress = device.address // MAC address
+//            if (device.name == DEVICE_NAME) {
+//                Log.d(TAG, "name = %s, MAC <%s>".format(deviceName, deviceHardwareAddress))
+//                device.uuids.forEach { uuid ->
+//                    Log.d(TAG, "uuid is %s".format(uuid.uuid))
+//                }
+//                connectThread = ConnectThread(device)
+//                connectThread?.start()
+//                return
+//            }
+//        }
+//    }
 
     override fun onPause() {
         super.onPause()
@@ -156,64 +151,64 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    @Override
-    fun run() {
-        var mmInStream: InputStream? = null
-        var valueMsg = Message()
-        valueMsg.what = VIEW_STATUS
-        valueMsg.obj = "connecting..."
-        mHandler.sendMessage(valueMsg)
-        try {
-
-            // 取得したデバイス名を使ってBluetoothでSocket接続
-            mSocket = mDevice!!.createRfcommSocketToServiceRecord(MY_UUID)
-            mSocket?.connect()
-            mmInStream = mSocket?.getInputStream()
-            mmOutputStream = mSocket?.getOutputStream()
-
-            // InputStreamのバッファを格納
-            val buffer = ByteArray(1024)
-
-            // 取得したバッファのサイズを格納
-            var bytes: Int
-            valueMsg = Message()
-            valueMsg.what = VIEW_STATUS
-            valueMsg.obj = "connected."
-            mHandler.sendMessage(valueMsg)
-            connectFlg = true
-            while (isRunning) {
-
-                // InputStreamの読み込み
-                if (mmInStream != null) {
-                    bytes = mmInStream.read(buffer)
-                    Log.i(TAG, "bytes=$bytes")
-                    // String型に変換
-                    val readMsg = String(buffer, 0, bytes)
-
-                    // null以外なら表示
-                    if (readMsg.trim { it <= ' ' } != null && readMsg.trim { it <= ' ' } != "") {
-                        Log.i(TAG, "value=" + readMsg.trim { it <= ' ' })
-                        valueMsg = Message()
-                        valueMsg.what = VIEW_INPUT
-                        valueMsg.obj = readMsg
-                        mHandler.sendMessage(valueMsg)
-                }
-                }
-            }
-        } // エラー処理
-        catch (e: Exception) {
-            valueMsg = Message()
-            valueMsg.what = VIEW_STATUS
-            valueMsg.obj = "Error1:$e"
-            mHandler.sendMessage(valueMsg)
-            try {
-                mSocket!!.close()
-            } catch (ee: Exception) {
-            }
-            isRunning = false
-            connectFlg = false
-        }
-    }
+//    @Override
+//    fun run() {
+//        var mmInStream: InputStream? = null
+//        var valueMsg = Message()
+//        valueMsg.what = VIEW_STATUS
+//        valueMsg.obj = "connecting..."
+//        mHandler.sendMessage(valueMsg)
+//        try {
+//
+//            // 取得したデバイス名を使ってBluetoothでSocket接続
+//            mSocket = mDevice!!.createRfcommSocketToServiceRecord(MY_UUID)
+//            mSocket?.connect()
+//            mmInStream = mSocket?.getInputStream()
+//            mmOutputStream = mSocket?.getOutputStream()
+//
+//            // InputStreamのバッファを格納
+//            val buffer = ByteArray(1024)
+//
+//            // 取得したバッファのサイズを格納
+//            var bytes: Int
+//            valueMsg = Message()
+//            valueMsg.what = VIEW_STATUS
+//            valueMsg.obj = "connected."
+//            mHandler.sendMessage(valueMsg)
+//            connectFlg = true
+//            while (isRunning) {
+//
+//                // InputStreamの読み込み
+//                if (mmInStream != null) {
+//                    bytes = mmInStream.read(buffer)
+//                    Log.i(TAG, "bytes=$bytes")
+//                    // String型に変換
+//                    val readMsg = String(buffer, 0, bytes)
+//
+//                    // null以外なら表示
+//                    if (readMsg.trim { it <= ' ' } != null && readMsg.trim { it <= ' ' } != "") {
+//                        Log.i(TAG, "value=" + readMsg.trim { it <= ' ' })
+//                        valueMsg = Message()
+//                        valueMsg.what = VIEW_INPUT
+//                        valueMsg.obj = readMsg
+//                        mHandler.sendMessage(valueMsg)
+//                }
+//                }
+//            }
+//        } // エラー処理
+//        catch (e: Exception) {
+//            valueMsg = Message()
+//            valueMsg.what = VIEW_STATUS
+//            valueMsg.obj = "Error1:$e"
+//            mHandler.sendMessage(valueMsg)
+//            try {
+//                mSocket!!.close()
+//            } catch (ee: Exception) {
+//            }
+//            isRunning = false
+//            connectFlg = false
+//        }
+//    }
 
     private fun onClick(v: View) {
                 try {
