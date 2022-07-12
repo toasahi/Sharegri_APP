@@ -20,9 +20,9 @@ import java.io.InputStream
 import java.io.OutputStream
 import java.util.*
 
-private val TAG = "ESP32_ASA"
+private const val TAG = "ESP32_ASA"
 /* デバイス名 環境に合わせて変更*/
-private val DEVICE_NAME = "ESP32_ASA"
+private const val DEVICE_NAME = "ESP32_ASA"
 
 val MESSAGE_READ: Int = 0
 val MESSAGE_WRITE: Int = 1
@@ -32,9 +32,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     val REQUEST_ENABLE_BT = 1
 
-
-    /* Bluetooth Adapter */
-    private var mAdapter: BluetoothAdapter? = null
+    var count = 0;
 
     /* Bluetoothデバイス */
     private var mDevice: BluetoothDevice? = null
@@ -220,7 +218,13 @@ class MainActivity : AppCompatActivity() {
     private fun onClick(v: View) {
                 try {
                     // Writeボタン押下時、'2'を送信
-                    mmOutputStream!!.write("2".toByteArray())
+                    if(count==0){
+                        mmOutputStream!!.write("2".toByteArray())
+                        count++
+                    }else{
+                        mmOutputStream!!.write("1".toByteArray())
+                        count--
+                    }
                     // 画面上に"Write:"を表示
                     mStatusTextView!!.text = "Write:"
                 } catch (e: IOException) {
