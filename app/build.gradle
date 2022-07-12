@@ -16,6 +16,7 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+
     viewBinding {
         enabled = true
     }
@@ -33,6 +34,10 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion '1.1.1'
+    }
 }
 
 dependencies {
@@ -45,4 +50,21 @@ dependencies {
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+
+    implementation("androidx.compose.ui:ui:1.1.1")
+    // Tooling support (Previews, etc.)
+    implementation("androidx.compose.ui:ui-tooling:1.1.1")
+    // Foundation (Border, Background, Box, Image, Scroll, shapes, animations, etc.)
+    implementation("androidx.compose.foundation:foundation:1.1.1")
+    // Material Design
+    implementation("androidx.compose.material:material:1.1.1")
+    // Material design icons
+    implementation("androidx.compose.material:material-icons-core:1.1.1")
+    implementation("androidx.compose.material:material-icons-extended:1.1.1")
+    // Integration with observables
+    implementation("androidx.compose.runtime:runtime-livedata:1.1.1")
+    implementation("androidx.compose.runtime:runtime-rxjava2:1.1.1")
+
+    // UI Tests
+    androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.1.1")
 }
