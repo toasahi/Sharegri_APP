@@ -4,6 +4,8 @@ import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothSocket
 import android.content.Intent
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -29,6 +31,8 @@ class MainActivity : AppCompatActivity() {
     val REQUEST_ENABLE_BT = 1
 
     var count = 0;
+
+    private val moterState: MutableMap<String,Boolean> = mutableMapOf("moter1" to false,"moter2" to false,"moter3" to false,"moter4" to false)
 
     /* Bluetoothデバイス */
     private var mDevice: BluetoothDevice? = null
@@ -88,8 +92,60 @@ class MainActivity : AppCompatActivity() {
 //            run()
 //        };
         binding.writeButton.setOnClickListener{
-            onClick(view)
+            if(moterState["moter1"] == true){
+                binding.writeButton.text = "START"
+                binding.writeButton.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#73C503")))
+                onClick(view,"2")
+                moterState["moter1"] = false
+            }else{
+                binding.writeButton.text = "STOP"
+                binding.writeButton.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#EB5757")))
+                onClick(view,"1")
+                moterState["moter1"] = true
+            }
         };
+
+        binding.writeButton2.setOnClickListener{
+            if(moterState["moter2"] == true){
+                binding.writeButton2.text = "START"
+                binding.writeButton2.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#73C503")))
+                onClick(view,"2")
+                moterState["moter2"] = false
+            }else{
+                binding.writeButton2.text = "STOP"
+                binding.writeButton2.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#EB5757")))
+                onClick(view,"1")
+                moterState["moter2"] = true
+            }
+        }
+
+        binding.writeButton3.setOnClickListener{
+            if(moterState["moter3"] == true){
+                binding.writeButton3.text = "START"
+                binding.writeButton3.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#73C503")))
+                onClick(view,"2")
+                moterState["moter3"] = false
+            }else{
+                binding.writeButton3.text = "STOP"
+                binding.writeButton3.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#EB5757")))
+                onClick(view,"1")
+                moterState["moter3"] = true
+            }
+        }
+
+        binding.writeButton4.setOnClickListener{
+            if(moterState["moter4"] == true){
+                binding.writeButton4.text = "START"
+                binding.writeButton4.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#73C503")))
+                onClick(view,"2")
+                moterState["moter4"] = false
+            }else{
+                binding.writeButton4.text = "STOP"
+                binding.writeButton4.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#EB5757")))
+                onClick(view,"4")
+                moterState["moter4"] = true
+            }
+        }
 
         val pairedDevices: Set<BluetoothDevice>? = bluetoothAdapter?.bondedDevices
         pairedDevices?.forEach { device ->
@@ -121,6 +177,20 @@ class MainActivity : AppCompatActivity() {
         if (!bluetoothAdapter?.isEnabled!!) {
             val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
             startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT)
+        }
+    }
+
+    fun onClickMoterButton(v:View,index: String) {
+        if(moterState["moter$index"] == true){
+            binding.writeButton3.text = "START"
+            binding.writeButton3.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#73C503")))
+            onClick(v,"2")
+            moterState["moter3"] = false
+        }else{
+            binding.writeButton3.text = "STOP"
+            binding.writeButton3.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#EB5757")))
+            onClick(v,"1")
+            moterState["moter3"] = true
         }
     }
 
@@ -210,18 +280,18 @@ class MainActivity : AppCompatActivity() {
 //        }
 //    }
 
-    private fun onClick(v: View) {
+    private fun onClick(v: View,index:String) {
                 try {
                     // Writeボタン押下時、'2'を送信
                     if(count==0){
-                        mmOutputStream!!.write("2".toByteArray())
+                        mmOutputStream!!.write(index.toByteArray())
                         count++
                     }else{
-                        mmOutputStream!!.write("1".toByteArray())
+                        mmOutputStream!!.write(index.toByteArray())
                         count--
                     }
                     // 画面上に"Write:"を表示
-                    mStatusTextView!!.text = "Write:"
+                    mStatusTextView!!.text = "Connected:"
                 } catch (e: IOException) {
                     val valueMsg = Message()
                     valueMsg.what = VIEW_STATUS
